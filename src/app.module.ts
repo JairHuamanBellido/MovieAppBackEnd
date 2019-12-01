@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { config } from 'dotenv';
 import { UsersModule } from './users/users.module';
-import { UsersService } from './users/users.service';
 
 config();
 @Module({
@@ -13,7 +12,7 @@ config();
             useNewUrlParser: true,
             useUnifiedTopology: true,
         
-        }),
+        }),UsersModule
         
     ],
     controllers: [AppController],

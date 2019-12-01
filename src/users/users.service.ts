@@ -9,7 +9,7 @@ export class UsersService {
 
     async create(user: UserCreate): Promise<User> {
         const newUser = new this.userModel(user);
-
-        return newUser.save();
+        
+        return await newUser.save();
     }
 }
