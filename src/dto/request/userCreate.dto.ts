@@ -3,4 +3,5 @@ export interface UserCreate{
     lastName:string;
     username:string;
     password:string;
+    avatar:string;
 }

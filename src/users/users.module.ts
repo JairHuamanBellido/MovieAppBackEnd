@@ -5,12 +5,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './schema/user.schema';
 import { UsersController } from './users.controller';
 import { AuthModule } from 'src/auth/auth.module';
-import { AuthService } from 'src/auth/auth.service';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-        forwardRef( ()=>AuthModule)
+        forwardRef( ()=>AuthModule),
+        MulterModule.register({
+            dest: './uploads'
+        })
     ],
     controllers: [UsersController],
     providers: [UsersService],

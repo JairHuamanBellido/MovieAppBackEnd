@@ -26,13 +26,4 @@ export class AuthService {
             access_token: this.jwtService.sign(payload),
         };
     }
-
-    async validateJWT(){
-        if(localStorage.getItem("jwt") == null){
-            return false
-        }
-        else{
-            return true;
-        }
-    }
 }
