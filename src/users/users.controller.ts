@@ -7,6 +7,9 @@ import {
     Req,
     Inject,
     forwardRef,
+    BadRequestException,
+    HttpCode,
+    Redirect,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Response, Request } from 'express';
@@ -22,20 +25,20 @@ export class UsersController {
     @Post('/')
     async create(@Res() res: Response, @Body() createUser: UserCreate) {
         const user = await this.userService.create(createUser);
-        
+
         res.json(user);
     }
 
     @Get('/')
     async get(@Res() res: Response, @Req() req: Request) {
-
         // test
         const user = await this.userService.findOne('jairxx20');
         res.json(user);
     }
 
     @Post('/auth')
-    async authenticate(
+    
+    async authenticate( 
         @Res() res: Response,
         @Body() credentials: AuthenticationRequest,
     ) {
@@ -43,6 +46,11 @@ export class UsersController {
             credentials.username,
             credentials.password,
         );
+        if (user === null) {
+            throw new BadRequestException('Invalid User');
+        }
+        
+        
         res.json(user);
     }
 }
