@@ -14,28 +14,32 @@ import { Response, Request } from 'express';
 import { UserCreate } from 'src/dto/request/userCreate.dto';
 import { AuthenticationRequest } from 'src/dto/request/Authentication.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+
+import {
+    UploadedFileMetadata,
+    AzureStorageService,
+} from '@nestjs/azure-storage';
 
 @Controller('api/users')
 export class UsersController {
-    constructor(private readonly userService: UsersService) {}
+    constructor(
+        private readonly userService: UsersService,
+        private readonly azureBlobStorage: AzureStorageService,
+    ) {}
 
     @Post('/')
-    @UseInterceptors(
-        FileInterceptor('avatar', {
-            storage: diskStorage({
-                destination: './uploads',
-                filename: (req, file, cb) => {
-                    return cb(null, `${file.originalname}`);
-                },
-            }),
-        }),
-    )
+    @UseInterceptors(FileInterceptor('avatar'))
     async create(
         @Res() res: Response,
         @Body() createUser: UserCreate,
-        @UploadedFile() file,
+        @UploadedFile() file: UploadedFileMetadata,
     ) {
+        file = {
+            ...file,
+            originalname: `${createUser.username}.jpg`,
+        };
+        const storageUrl = await this.azureBlobStorage.upload(file);
+
         const user = await this.userService.create(createUser);
 
         res.json(user);
@@ -44,6 +48,7 @@ export class UsersController {
     @Get('/')
     async get(@Res() res: Response, @Req() req: Request) {
         // test
+
         const user = await this.userService.findOne('jairxx20');
         res.json(user);
     }
