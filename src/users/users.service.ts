@@ -25,4 +25,8 @@ export class UsersService {
     async validateCredentials(username: string, password: string) {
         return await this.authService.validateUser(username, password);
     }
+
+    async findById(id:any){
+        return await this.userModel.findOne({_id:id});
+    }
 }

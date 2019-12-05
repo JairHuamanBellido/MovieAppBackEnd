@@ -8,6 +8,8 @@ import {
     BadRequestException,
     UseInterceptors,
     UploadedFile,
+    UseGuards,
+    Param,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Response, Request } from 'express';
@@ -19,6 +21,7 @@ import {
     UploadedFileMetadata,
     AzureStorageService,
 } from '@nestjs/azure-storage';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/users')
 export class UsersController {
@@ -45,11 +48,12 @@ export class UsersController {
         res.json(user);
     }
 
-    @Get('/')
-    async get(@Res() res: Response, @Req() req: Request) {
-        // test
 
-        const user = await this.userService.findOne('jairxx20');
+    @UseGuards(AuthGuard('jwt'))
+    @Get('/:id')
+    async get(@Res() res: Response, @Req() req: Request, @Param() params) {
+
+        const user = await this.userService.findById(params.id);
         res.json(user);
     }
 
