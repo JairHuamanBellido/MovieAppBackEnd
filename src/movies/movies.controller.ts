@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Res, Param } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { Response } from 'express';
 import { Movie } from 'src/dto/response/MovieResponse.dto';
@@ -19,5 +19,11 @@ export class MoviesController {
         res.json(popularMovies);
 
 
+    }
+
+    @Get("/:id")
+    async findById(@Res() res:Response, @Param() params){
+        const movie = await this.movieService.findById(params.id)
+        res.json(movie);
     }
 }

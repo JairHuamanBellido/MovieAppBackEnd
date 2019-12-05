@@ -17,10 +17,12 @@ export class MoviesService {
 
                 results.forEach(element => {
                     const { title, poster_path, id } = element;
+
                     const movie: Movie = {
                         id: id,
                         poster_path: poster_path,
                         title: title,
+                        release_date: element.release_date.slice(0, 4),
                     };
 
                     response.push(movie);
@@ -29,6 +31,14 @@ export class MoviesService {
                 return response;
             },
         });
+
+        return res.data;
+    }
+
+    async findById(id): Promise<any> {
+        const res = await axios.get(
+            `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.API_KEY}&language=en-US`,
+        );
 
         return res.data;
     }
