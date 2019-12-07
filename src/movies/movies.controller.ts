@@ -26,4 +26,10 @@ export class MoviesController {
         const movie = await this.movieService.findById(params.id)
         res.json(movie);
     }
+
+    @Get("credits/:id")
+    async findActorsByMovieId(@Res() res:Response, @Param() params){
+        const movie = await this.movieService.findActorsByMovieId(params.id)
+        res.json(movie);
+    }
 }
