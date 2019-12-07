@@ -1,7 +1,7 @@
 import { Controller, Get, Res, Param } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { Response } from 'express';
-import { Movie } from 'src/dto/response/MovieResponse.dto';
+
 
 @Controller('api/movies')
 export class MoviesController {
