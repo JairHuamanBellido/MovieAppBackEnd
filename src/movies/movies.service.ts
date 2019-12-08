@@ -85,4 +85,31 @@ export class MoviesService {
 
         return res.data;
     }
+
+    async findSimilarMovies(id): Promise<MoviePoster[]> {
+        const res = await axios.request<MoviePoster[]>({
+            url: `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${process.env.API_KEY}`,
+            transformResponse: (r: MoviePoster[] | any) => {
+                const movies: MoviePoster[] = [];
+
+                const results: MoviePoster[] = JSON.parse(r).results.slice(
+                    0,
+                    4,
+                );
+
+                results.forEach(movie => {
+                    const { title, poster_path, id, release_date } = movie;
+                    movies.push({
+                        id: id,
+                        poster_path: poster_path,
+                        release_date: release_date.slice(0, 4),
+                        title: title,
+                    });
+                });
+
+                return movies;
+            },
+        });
+        return res.data;
+    }
 }

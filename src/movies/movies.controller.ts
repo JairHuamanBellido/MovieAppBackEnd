@@ -32,4 +32,11 @@ export class MoviesController {
         const movie = await this.movieService.findActorsByMovieId(params.id)
         res.json(movie);
     }
+
+    @Get("/similar/:id")
+    async findSilimarMovieById(@Res() res:Response, @Param() params){
+        const movie = await this.movieService.findSimilarMovies(params.id)
+        res.json(movie);
+    }
+
 }
