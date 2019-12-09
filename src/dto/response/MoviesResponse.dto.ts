@@ -1,5 +1,6 @@
 import { Actor } from "src/movies/interfaces/Actor.interface";
 import { Gender } from "src/movies/interfaces/Gender.interface";
+import { MoviePoster } from "./MovieResponse.dto";
 
 export interface MovieDetails{
     id:number;
@@ -11,5 +12,6 @@ export interface MovieDetails{
     actors:Actor[];
     release_date:string;
     runtime:number;
-    genres:Gender[]
+    genres:Gender[],
+    similarMovies:MoviePoster[]
 }

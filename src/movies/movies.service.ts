@@ -54,6 +54,7 @@ export class MoviesService {
                     runtime: result.runtime,
                     title: result.title,
                     vote_average: result.vote_average,
+                    similarMovies: await this.findSimilarMovies(result.id),
                 };
 
                 return response;
@@ -110,6 +111,30 @@ export class MoviesService {
                 return movies;
             },
         });
+        return res.data;
+    }
+
+    async findByName(name: string): Promise<MoviePoster[]> {
+        const res = await axios.request<MoviePoster[]>({
+            url: `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}&query=${name}`,
+            transformResponse: (r: MoviePoster[] | any) => {
+                const movies: MoviePoster[] = [];
+
+                const results: MoviePoster[] = JSON.parse(r).results;
+
+                results.forEach(movie => {
+                    movies.push({
+                        id: movie.id,
+                        poster_path: movie.poster_path,
+                        release_date: movie.release_date.slice(0,4),
+                        title: movie.title,
+                    });
+                });
+
+                return movies;
+            },
+        });
+
         return res.data;
     }
 }

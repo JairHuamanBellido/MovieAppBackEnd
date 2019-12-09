@@ -39,4 +39,10 @@ export class MoviesController {
         res.json(movie);
     }
 
+
+    @Get("/name/:name")
+    async findMoviesByName(@Res() res:Response, @Param() params){
+        const movie =  await this.movieService.findByName(params.name);
+        res.json(movie);
+    }
 }
